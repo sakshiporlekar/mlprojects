@@ -6,6 +6,7 @@ from src.logger import logging
 import pandas as pd 
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
+from src.componants.data_transformation import DataTranformation,DataTransformationConfig
 
 @dataclass
 class DataIngestionConfig:
@@ -16,6 +17,7 @@ class DataIngestionConfig:
 
 
 class DataIngestion:
+    #init method automatically called when obj is created
     def __init__(self):
         self.ingestion_config=DataIngestionConfig()
 
@@ -43,7 +45,11 @@ class DataIngestion:
             raise CustomException(e,sys)
 def main():
     obj = DataIngestion()
-    obj.initiate_data_ingestion()
+    train_data,test_data=obj.initiate_data_ingestion()
+
+    data_transformation=DataTranformation()
+    data_transformation.initiate_data_transformation(train_data,test_data)
+    
 
 if __name__ == "__main__":
     main()
