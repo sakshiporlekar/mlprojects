@@ -69,22 +69,30 @@ class DataTranformation:
             logging.info("read train and test data completetd")
             logging.info('obtaining preprocesing object')
 
+            #return preprocossor : cleaned and scaled 
             preprocessing_obj=self.get_data_transformer_object()
             target_column_name='math_score'
             numerical_columns=['writing_score','reading_score']
 
-
+            #x_train and y_train : 
+            #x_train: all cols except math score y_train:math_score
             input_feature_train_df=train_df.drop(columns=[target_column_name],axis=1)
             target_feature_train_df=train_df[target_column_name]
+
+            #x_test and y_test : 
+            #x_test: all cols except math score y_test:math_score
 
             input_feature_test_df=test_df.drop(columns=[target_column_name],axis=1)
             target_feature_test_df=test_df[target_column_name]
 
             logging.info(f'applying preprocessing object on training dataframe and testing dataframe')
 
+            #applying preprocessing object on training dataframe and testing dataframe
+
             input_feature_train_arr=preprocessing_obj.fit_transform(input_feature_train_df)
             input_feature_test_arr=preprocessing_obj.transform(input_feature_test_df)
 
+            #np.c: is use for columnwise concatnation
             train_arr=np.c_[
                 input_feature_train_arr,np.array(target_feature_train_df)
             ]
@@ -93,6 +101,9 @@ class DataTranformation:
                 input_feature_test_arr,np.array(target_feature_test_df)
             ]
             logging.info('savved preprocessing object')
+
+            #save_obj function defined in utils.py file
+
             save_obj(
                 file_path=self.data_transformation_config.preprocessor_obj_file_path,
                 obj=preprocessing_obj
